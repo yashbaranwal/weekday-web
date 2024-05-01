@@ -1,7 +1,6 @@
 "use client";
 
 import JobCard from "@/components/job-card";
-import JobSkeletonCard from "@/components/job-skeleton-card";
 import { Input } from "@/components/ui/input";
 import { minBaseSalaryOptions } from "@/constants/base-salary-options";
 import { minExpOptions } from "@/constants/experience-options";
@@ -9,18 +8,54 @@ import { locationOptions } from "@/constants/location-options";
 import { modeOptions } from "@/constants/mode-options";
 import { roleOptions } from "@/constants/role-options";
 import { techStackOptions } from "@/constants/tech-options";
-import { useGetJobsMutation } from "@/redux/api";
 import { reactSelectStyle } from "@/styles/react-select-style";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 
 const Home = () => {
-  const [getJobs, { data, isLoading }] = useGetJobsMutation();
+  const [jobs, setJobs] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  console.log(data, "data");
+  const getCardData = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+    };
+
+    const res = await fetch(
+      `https://api.weekday.technology/adhoc/getSampleJdJSON?limit=9&offset=${page}`,
+      requestOptions
+    );
+    const data = await res.json();
+    setJobs((prev) => [...prev, ...data.jdList]);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getJobs({ limit: 10, offset: 0 });
+    getCardData();
+  }, [page]);
+
+  const handelInfiniteScroll = async () => {
+    try {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.documentElement.scrollHeight
+      ) {
+        setLoading(true);
+        setPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handelInfiniteScroll);
+    return () => window.removeEventListener("scroll", handelInfiniteScroll);
   }, []);
 
   return (
@@ -116,19 +151,9 @@ const Home = () => {
 
       {/* job cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {isLoading ? (
-          <>
-            <JobSkeletonCard />
-            <JobSkeletonCard />
-            <JobSkeletonCard />
-            <JobSkeletonCard />
-            <JobSkeletonCard />
-            <JobSkeletonCard />
-          </>
-        ) : (
-          data?.jdList?.length > 0 &&
-          data.jdList.map((jd) => <JobCard jd={jd} key={jd.jdUid} />)
-        )}
+        {jobs.map((jd) => (
+          <JobCard jd={jd} key={jd.jdUid} />
+        ))}
       </div>
     </div>
   );
