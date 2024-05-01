@@ -1,27 +1,27 @@
 export const roleOptions = [
     {
-        label: "Software Engineer",
-        value: "Software Engineer"
+        label: "Tech Lead",
+        value: "Tech Lead"
     },
     {
-        label: "Web Developer",
-        value: "Web Developer"
+        label: "Ios",
+        value: "Ios"
     },
     {
-        label: "Mobile App Developer",
-        value: "Mobile App Developer"
+        label: "Android",
+        value: "Android"
     },
     {
         label: "Full Stack Developer",
         value: "Full Stack Developer"
     },
     {
-        label: "Frontend Developer",
-        value: "Frontend Developer"
+        label: "Frontend",
+        value: "Frontend"
     },
     {
-        label: "Backend Developer",
-        value: "Backend Developer"
+        label: "Backend",
+        value: "Backend"
     },
     {
         label: "DevOps Engineer",

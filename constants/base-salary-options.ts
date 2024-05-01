@@ -1,4 +1,4 @@
-export const modeOptions = [
+export const minBaseSalaryOptions = [
     {
         label:"0L",
         value:"0L"

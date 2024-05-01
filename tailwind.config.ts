@@ -33,8 +33,8 @@ const config = {
         //   foreground: "hsl(var(--secondary-foreground))",
         // },
 
-        primary: "#023E62",
-        secondary: "#65AC4C",
+        primary: "#55EFC4",
+        secondary: "#023E62",
         tertiary: "#c15757", 
         lightBlack: "#5F4F4F",
         gray: "#959499",

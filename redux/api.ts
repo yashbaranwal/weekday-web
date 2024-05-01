@@ -1,36 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_BASE_URL, API_TOKEN } from "@/general";
+import { API_BASE_URL } from "@/general";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
-  prepareHeaders: (headers, { getState }) => {
-    // if (token) {
-    //   headers.set("authorization", `Bearer ${token}`);
-    // }
-
-    return headers;
-  },
 });
 
 export const myApi = createApi({
   reducerPath: "myApi",
   baseQuery: baseQuery,
   endpoints: (builder) => ({
-    getJobs: builder.query({
+    getJobs: builder.mutation({
       query: (args) => {
-        const { limit, offset } = args;
+        const { limit, offset } = args
         return {
-          url: "regions",
-          params:
-             { limit: limit, offset: offset }
+          url: "adhoc/getSampleJdJSON",
+          method: "POST",
+          body: {
+            limit: limit,
+            offset: offset
+          }
         };
       },
     }),
-    
-
   }),
 });
 
 export const {
-  useGetJobsQuery
+  useGetJobsMutation
 } = myApi;

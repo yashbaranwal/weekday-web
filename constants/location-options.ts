@@ -1,4 +1,4 @@
-export const locations = [
+export const locationOptions = [
     {
         label: "Andhra Pradesh",
         value: "Andhra Pradesh"

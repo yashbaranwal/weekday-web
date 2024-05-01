@@ -1,4 +1,4 @@
-export const minExp = [
+export const minExpOptions = [
     {
         label:"1",
         value:"1"
