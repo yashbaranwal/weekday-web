@@ -1,10 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { myApi } from "./api";
-import dispatchOrderSlice from "./slices/dispatch-order-slice";
+import jobSlice from "./slices/job-slice";
 
 const rootReducer = combineReducers({
   [myApi.reducerPath]: myApi.reducer,
-  dispatchOrder: dispatchOrderSlice,
+  job: jobSlice,
 });
 
 

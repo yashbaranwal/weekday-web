@@ -9,13 +9,20 @@ import { locationOptions } from "@/constants/location-options";
 import { modeOptions } from "@/constants/mode-options";
 import { roleOptions } from "@/constants/role-options";
 import { techStackOptions } from "@/constants/tech-options";
+import { setJobs, setSelectedRoles } from "@/redux/slices/job-slice";
 import { reactSelectStyle } from "@/styles/react-select-style";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 
 const Home = () => {
-  const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]);
+
+  const jobs = useSelector((state) => state.job.jobs)
+  const filteredJobs = useSelector((state) => state.job.filteredJobs)
+  const selectedRoles = useSelector((state) => state.job.selectedRoles)
+
+  const dispatch = useDispatch()
+
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -33,8 +40,7 @@ const Home = () => {
       requestOptions
     );
     const data = await res.json();
-    setJobs((prev) => [...prev, ...data.jdList]);
-    setFilteredJobs((prev) => [...prev, ...data.jdList]);
+    dispatch(setJobs([...jobs, ...data.jdList]));
     setLoading(false);
   };
 
@@ -61,19 +67,10 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handelInfiniteScroll);
   }, []);
 
-  const [selectedRoles, setSelectedRoles] = useState([]);
 
   // Update selected roles when user selects new roles
   const handleRoleChange = (selectedOptions) => {
-    setSelectedRoles(selectedOptions);
-
-    // Filter jobs based on selected roles
-    const result = jobs.filter((job) =>
-      selectedOptions.every((selectedRole) =>
-        job.jobRole.includes(selectedRole.value)
-      )
-    );
-    setFilteredJobs(result);
+    dispatch(setSelectedRoles(selectedOptions));  
   };
 
   return (
