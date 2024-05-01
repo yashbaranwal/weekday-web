@@ -1,0 +1,34 @@
+export const modeOptions = [
+    {
+        label:"0L",
+        value:"0L"
+    },
+    {
+        label:"10L",
+        value:"10L"
+    },   
+    {
+        label:"20L",
+        value:"20L"
+    },   
+    {
+        label:"30L",
+        value:"30L"
+    },   
+    {
+        label:"40L",
+        value:"40L"
+    },   
+    {
+        label:"50L",
+        value:"50L"
+    },   
+    {
+        label:"60L",
+        value:"60L"
+    },   
+    {
+        label:"70L",
+        value:"70L"
+    },   
+]
