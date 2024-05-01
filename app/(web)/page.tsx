@@ -9,20 +9,34 @@ import { locationOptions } from "@/constants/location-options";
 import { modeOptions } from "@/constants/mode-options";
 import { roleOptions } from "@/constants/role-options";
 import { techStackOptions } from "@/constants/tech-options";
-import { setJobs, setSelectedLocations, setSelectedRoles } from "@/redux/slices/job-slice";
+import useDebounce from "@/hooks/useDebounce";
+import {
+  selectFilteredJobs,
+  selectJobs,
+  selectLocations,
+  selectModes,
+  selectRoles,
+  setJobs,
+  setSelectedLocations,
+  setSelectedModes,
+  setSelectedRoles,
+} from "@/redux/slices/job-slice";
 import { reactSelectStyle } from "@/styles/react-select-style";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 
 const Home = () => {
+  const dispatch = useDispatch();
 
-  const jobs = useSelector((state) => state.job.jobs)
-  const filteredJobs = useSelector((state) => state.job.filteredJobs)
-  const selectedRoles = useSelector((state) => state.job.selectedRoles)
-  const selectedLocations = useSelector((state) => state.job.selectedLocations)
+  const jobs = useSelector(selectJobs);
+  const filteredJobs = useSelector(selectFilteredJobs);
+  const selectedRoles = useSelector(selectRoles);
+  const selectedLocations = useSelector(selectLocations);
+  const selectedModes = useSelector(selectModes);
 
-  const dispatch = useDispatch()
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchCompany = useDebounce(searchTerm, 300);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -68,13 +82,16 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handelInfiniteScroll);
   }, []);
 
-
   const handleRoleChange = (selectedOptions) => {
-    dispatch(setSelectedRoles(selectedOptions));  
+    dispatch(setSelectedRoles(selectedOptions));
   };
 
   const handleLocationChange = (selectedOptions) => {
-    dispatch(setSelectedLocations(selectedOptions));  
+    dispatch(setSelectedLocations(selectedOptions));
+  };
+
+  const handleModeChange = (selectedOptions) => {
+    dispatch(setSelectedModes(selectedOptions));
   };
 
   return (
@@ -92,6 +109,8 @@ const Home = () => {
           onChange={handleRoleChange}
           options={roleOptions}
         />
+        {/* don't find min exp value (always null) on response to filter out */}
+
         <Select
           styles={reactSelectStyle}
           isMulti
@@ -110,44 +129,34 @@ const Home = () => {
           styles={reactSelectStyle}
           isMulti
           placeholder="Remote"
-          // value={formData.orderDispatchDays}
-          // onChange={(selectedValues) => {
-          //   setFormData({
-          //     ...formData,
-          //     orderDispatchDays: selectedValues,
-          //   });
-          // }}
+          value={selectedModes}
+          onChange={handleModeChange}
           options={modeOptions}
         />
+
+        {/* don't find min base pay value (always null) on response to filter out */}
+
         <Select
           styles={reactSelectStyle}
           isMulti
           placeholder="Minimum Base Pay Salary"
-          // value={formData.orderDispatchDays}
-          // onChange={(selectedValues) => {
-          //   setFormData({
-          //     ...formData,
-          //     orderDispatchDays: selectedValues,
-          //   });
-          // }}
           options={minBaseSalaryOptions}
         />
+
+        {/* don't find tech stack on response to filter out */}
         <Select
           styles={reactSelectStyle}
           isMulti
           placeholder="Tech Stack"
-          // value={formData.orderDispatchDays}
-          // onChange={(selectedValues) => {
-          //   setFormData({
-          //     ...formData,
-          //     orderDispatchDays: selectedValues,
-          //   });
-          // }}
           options={techStackOptions}
         />
+
+        {/* don't find company name on response to filter out */}
         <Input
           placeholder="Search Company Name"
           className="text-12 placeholder:text-xs placeholder:text-gray w-fit border-[1.5px]"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 

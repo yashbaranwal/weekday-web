@@ -4,7 +4,8 @@ const initialState = {
   jobs: [],
   filteredJobs: [],
   selectedRoles: [],
-  selectedLocations: []
+  selectedLocations: [],
+  selectedModes: []
 };
 
 const JobSlice = createSlice({
@@ -28,6 +29,12 @@ const JobSlice = createSlice({
       const selectedLocations = state.selectedLocations.map(ele => ele.value); 
       state.filteredJobs = state.jobs.filter(job => selectedLocations.every(location => job.location.includes(location)));
     },
+    setSelectedModes: (state, action) => {
+      state.selectedModes = action.payload;
+
+      const selectedModes = state.selectedModes.map(ele => ele.value); 
+      state.filteredJobs = state.jobs.filter(job => selectedModes.every(mode => job.location.includes(mode)));
+    },
 
   },
 });
@@ -36,6 +43,14 @@ export const {
   setJobs,
   setSelectedRoles,
   setSelectedLocations,
+  setSelectedModes,
 } = JobSlice.actions;
+
+export const selectJobs = (state) => state.job.jobs
+export const selectFilteredJobs = (state) => state.job.filteredJobs
+export const selectRoles = (state) => state.job.selectedRoles
+export const selectLocations = (state) => state.job.selectedLocations
+export const selectModes = (state) => state.job.selectedModes
+
 
 export default JobSlice.reducer;
