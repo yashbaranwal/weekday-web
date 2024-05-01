@@ -27,7 +27,7 @@ const Home = () => {
     };
 
     const res = await fetch(
-      `https://api.weekday.technology/adhoc/getSampleJdJSON?limit=9&offset=${page}`,
+      `https://api.weekday.technology/adhoc/getSampleJdJSON?limit=8&offset=${page}`,
       requestOptions
     );
     const data = await res.json();
