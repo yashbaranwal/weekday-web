@@ -1,23 +1,19 @@
 export const locationOptions = [
     {
-        label: "Andhra Pradesh",
-        value: "Andhra Pradesh"
+        label: "Chennai",
+        value: "chennai"
     },
     {
-        label: "Arunachal Pradesh",
-        value: "Arunachal Pradesh"
+        label: "Delhi NCR",
+        value: "delhi ncr"
     },
     {
-        label: "Assam",
-        value: "Assam"
+        label: "Mumbai",
+        value: "mumbai"
     },
     {
-        label: "Bihar",
-        value: "Bihar"
-    },
-    {
-        label: "Chhattisgarh",
-        value: "Chhattisgarh"
+        label: "Bangalore",
+        value: "bangalore"
     },
     {
         label: "Goa",

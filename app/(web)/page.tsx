@@ -9,7 +9,7 @@ import { locationOptions } from "@/constants/location-options";
 import { modeOptions } from "@/constants/mode-options";
 import { roleOptions } from "@/constants/role-options";
 import { techStackOptions } from "@/constants/tech-options";
-import { setJobs, setSelectedRoles } from "@/redux/slices/job-slice";
+import { setJobs, setSelectedLocations, setSelectedRoles } from "@/redux/slices/job-slice";
 import { reactSelectStyle } from "@/styles/react-select-style";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ const Home = () => {
   const jobs = useSelector((state) => state.job.jobs)
   const filteredJobs = useSelector((state) => state.job.filteredJobs)
   const selectedRoles = useSelector((state) => state.job.selectedRoles)
+  const selectedLocations = useSelector((state) => state.job.selectedLocations)
 
   const dispatch = useDispatch()
 
@@ -68,9 +69,12 @@ const Home = () => {
   }, []);
 
 
-  // Update selected roles when user selects new roles
   const handleRoleChange = (selectedOptions) => {
     dispatch(setSelectedRoles(selectedOptions));  
+  };
+
+  const handleLocationChange = (selectedOptions) => {
+    dispatch(setSelectedLocations(selectedOptions));  
   };
 
   return (
@@ -92,26 +96,14 @@ const Home = () => {
           styles={reactSelectStyle}
           isMulti
           placeholder="Min Experience"
-          // value={formData.orderDispatchDays}
-          // onChange={(selectedValues) => {
-          //   setFormData({
-          //     ...formData,
-          //     orderDispatchDays: selectedValues,
-          //   });
-          // }}
           options={minExpOptions}
         />
         <Select
           styles={reactSelectStyle}
           isMulti
           placeholder="Location"
-          // value={formData.orderDispatchDays}
-          // onChange={(selectedValues) => {
-          //   setFormData({
-          //     ...formData,
-          //     orderDispatchDays: selectedValues,
-          //   });
-          // }}
+          value={selectedLocations}
+          onChange={handleLocationChange}
           options={locationOptions}
         />
         <Select

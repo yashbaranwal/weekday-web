@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   jobs: [],
   filteredJobs: [],
-  selectedRoles: []
+  selectedRoles: [],
+  selectedLocations: []
 };
 
 const JobSlice = createSlice({
@@ -20,7 +21,13 @@ const JobSlice = createSlice({
 
       const selectedRoles = state.selectedRoles.map(role => role.value); 
       state.filteredJobs = state.jobs.filter(job => selectedRoles.every(role => job.jobRole.includes(role)));
-    }
+    },
+    setSelectedLocations: (state, action) => {
+      state.selectedLocations = action.payload;
+
+      const selectedLocations = state.selectedLocations.map(ele => ele.value); 
+      state.filteredJobs = state.jobs.filter(job => selectedLocations.every(location => job.location.includes(location)));
+    },
 
   },
 });
@@ -28,6 +35,7 @@ const JobSlice = createSlice({
 export const {
   setJobs,
   setSelectedRoles,
+  setSelectedLocations,
 } = JobSlice.actions;
 
 export default JobSlice.reducer;
