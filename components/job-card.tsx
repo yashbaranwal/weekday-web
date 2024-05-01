@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Badge } from "./ui/badge";
 import { TEST_PROFILE_IMAGE_URL } from "@/general";
 import { Button } from "./ui/button";
-import { Clock } from "lucide-react";
+import { Clock, Zap } from "lucide-react";
 
 const JobCard = ({ jd }) => {
   return (
@@ -53,7 +53,9 @@ const JobCard = ({ jd }) => {
             </p>
             <p className="font-light text-12">{jd.minExp ?? 3} Years</p>
           </div>
-          <Button className="w-full bg-primary text-black">Easy Apply</Button>
+          <Button className="w-full bg-primary text-black">
+            <Zap size={15} className="mr-2" fill="yellow" />
+            Easy Apply</Button>
           <Button className="w-full bg-secondary hover:bg-secondary">
             <div className="flex items-center space-x-2 mr-3">
               <Image
