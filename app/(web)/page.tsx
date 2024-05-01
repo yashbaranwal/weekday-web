@@ -1,6 +1,7 @@
 "use client";
 
 import JobCard from "@/components/job-card";
+import JobSkeletonCard from "@/components/job-skeleton-card";
 import { Input } from "@/components/ui/input";
 import { minBaseSalaryOptions } from "@/constants/base-salary-options";
 import { minExpOptions } from "@/constants/experience-options";
@@ -14,6 +15,7 @@ import Select from "react-select";
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -27,11 +29,12 @@ const Home = () => {
     };
 
     const res = await fetch(
-      `https://api.weekday.technology/adhoc/getSampleJdJSON?limit=8&offset=${page}`,
+      `https://api.weekday.technology/adhoc/getSampleJdJSON?limit=10&offset=${page}`,
       requestOptions
     );
     const data = await res.json();
     setJobs((prev) => [...prev, ...data.jdList]);
+    setFilteredJobs((prev) => [...prev, ...data.jdList]);
     setLoading(false);
   };
 
@@ -58,6 +61,21 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handelInfiniteScroll);
   }, []);
 
+  const [selectedRoles, setSelectedRoles] = useState([]);
+
+  // Update selected roles when user selects new roles
+  const handleRoleChange = (selectedOptions) => {
+    setSelectedRoles(selectedOptions);
+
+    // Filter jobs based on selected roles
+    const result = jobs.filter((job) =>
+      selectedOptions.every((selectedRole) =>
+        job.jobRole.includes(selectedRole.value)
+      )
+    );
+    setFilteredJobs(result);
+  };
+
   return (
     <div className="p-5 flex flex-col space-y-8 max-w-5xl mx-auto pb-[4rem]">
       <p className="text-center font-bold text-secondary text-20">
@@ -69,13 +87,8 @@ const Home = () => {
           styles={reactSelectStyle}
           isMulti
           placeholder="Roles"
-          // value={formData.orderDispatchDays}
-          // onChange={(selectedValues) => {
-          //   setFormData({
-          //     ...formData,
-          //     orderDispatchDays: selectedValues,
-          //   });
-          // }}
+          value={selectedRoles}
+          onChange={handleRoleChange}
           options={roleOptions}
         />
         <Select
@@ -151,9 +164,16 @@ const Home = () => {
 
       {/* job cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {jobs.map((jd) => (
-          <JobCard jd={jd} key={jd.jdUid} />
+        {filteredJobs.map((jd, idx) => (
+          <JobCard jd={jd} key={idx} />
         ))}
+        {loading && (
+          <>
+            <JobSkeletonCard />
+            <JobSkeletonCard />
+            <JobSkeletonCard />
+          </>
+        )}
       </div>
     </div>
   );
